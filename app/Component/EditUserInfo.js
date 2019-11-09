@@ -152,7 +152,7 @@ storeData = async (data) => {
       (
       <ActivityIndicator
         animating={this.state.isLoading}
-        color='#ffffff'
+        color='blue'
         size='large'
       />
       ) :
