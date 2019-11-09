@@ -10,9 +10,9 @@ import {
   TouchableHighlight,
   ActivityIndicator,
   Button,
-  AsyncStorage,
   ScrollView
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { DismissKeyboard } from './helper/DismissKeyBoard';
 import { api } from '../utils/api';
 

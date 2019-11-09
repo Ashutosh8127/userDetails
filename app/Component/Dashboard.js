@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {
   ActivityIndicator,
-  AsyncStorage,
   StatusBar,
   StyleSheet,
   ScrollView,
@@ -10,6 +9,7 @@ import {
   Button,
   View
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { capitalize } from '../utils/utils';
 import Separator from './helper/Seperator';
 
@@ -27,6 +27,7 @@ export default class Dashboard extends Component {
       </TouchableHighlight>
     )
   });
+  _isMounted = false;
   constructor(props) {
     super(props)
     this.state={
@@ -54,25 +55,31 @@ export default class Dashboard extends Component {
     }
   }
   async componentDidMount() {
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
-      this.updateDetails()
-    })
-    let userDetails = await AsyncStorage.getItem('userDetails');
-    let details = JSON.parse(userDetails);
-    if(details) {
-      this.setState({
-        name: details.Name,
-        username: details.UserName,
-        email: details.Email,
-        mobile: details.Phone,
-        password: details.Password
+    this._isMounted = true;
+      this.focusListener = this.props.navigation.addListener('didFocus', () => {
+        if(this._isMounted) {
+          this.updateDetails()
+        }
       })
-    } else {
-      await AsyncStorage.clear();
-      this.props.navigation.navigate('Auth');
+      let userDetails = await AsyncStorage.getItem('userDetails');
+      let details = JSON.parse(userDetails);
+      if(details) {
+        if(this._isMounted) {
+          this.setState({
+            name: details.Name,
+            username: details.UserName,
+            email: details.Email,
+            mobile: details.Phone,
+            password: details.Password
+          })
+        }
+      } else {
+        await AsyncStorage.clear();
+        this.props.navigation.navigate('Auth');
+      }
     }
-  }
   componentWillUnmount () {
+    this._isMounted = false;
     this.focusListener.remove()
   }
   signOutAsync = async () => {

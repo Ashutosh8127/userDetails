@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {
   ActivityIndicator,
-  AsyncStorage,
   Text,
   TextInput,
   StatusBar,
@@ -13,6 +12,7 @@ import {
   View,
   ScrollView
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { api } from '../utils/api';
 import { DismissKeyboard } from './helper/DismissKeyBoard';
 
@@ -32,6 +32,12 @@ export default class LoginScreen extends Component {
   storeData = async (data) => {
     await AsyncStorage.setItem('login', 'true');
     await AsyncStorage.setItem('userDetails', JSON.stringify(data));
+    this.props.navigation.navigate('App');
+    this.setState({
+      username: '',
+      password: '',
+      isLoading: false
+    });
   }
   handleSubmit = () => {
     let { username, password } = this.state;
@@ -44,14 +50,6 @@ export default class LoginScreen extends Component {
       api.authUser(username, password)
         .then((authData) => {
           this.storeData(authData);
-          setTimeout(() => {
-            this.props.navigation.navigate('App');
-            this.setState({
-              username: '',
-              password: '',
-              isLoading: false
-            });
-          }, 1000);
         })
         .catch((e) => {
           this.setState({

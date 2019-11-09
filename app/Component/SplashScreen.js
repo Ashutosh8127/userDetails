@@ -1,22 +1,22 @@
 import React, {Component} from 'react';
 import {
   ActivityIndicator,
-  AsyncStorage,
   StatusBar,
   StyleSheet,
   View,
   Image
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class SplashScreen extends Component {
   static navigationOptions = {
     header: null
   };
   componentDidMount() {
-    this._bootstrapAsync();
+    this.check();
   }
 
-  _bootstrapAsync = async () => {
+  check = async () => {
     const login = await AsyncStorage.getItem('login');
     this.props.navigation.navigate(login ? 'App' : 'Auth');
   };

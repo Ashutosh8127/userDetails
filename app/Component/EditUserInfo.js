@@ -9,12 +9,12 @@ import {
   Button,
   KeyboardAvoidingView,
   Keyboard,
-  AsyncStorage,
   ActivityIndicator,
   ScrollView
 } from 'react-native';
 import { api } from '../utils/api';
 import { DismissKeyboard } from './helper/DismissKeyBoard';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class EditUserInfo extends Component {
   static navigationOptions = {
